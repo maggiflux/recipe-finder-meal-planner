@@ -1,35 +1,47 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const TabsLayout = () => {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+    <SafeAreaView style={{ flex: 1 }}>
+      <Tabs
+        screenOptions={{
+          // headerShown: false,
+          tabBarActiveTintColor: "blue",
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="home/index"
+          options={{
+            title: "Home",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome size={28} name="home" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="recepiesList/index"
+          options={{
+            title: "Recetas",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome size={28} name="home" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="(stack)"
+          options={{
+            title: "Planner",
+            tabBarIcon: ({ color }) => (
+              <FontAwesome size={28} name="home" color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+    </SafeAreaView>
   );
-}
+};
+
+export default TabsLayout;

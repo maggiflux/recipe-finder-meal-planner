@@ -23,7 +23,8 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       "expo-router",
@@ -36,6 +37,52 @@
           "backgroundColor": "#ffffff",
           "dark": {
             "backgroundColor": "#000000"
+          }
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Rubik-BlackItalic.ttf",
+            "./assets/fonts/Rubik-Light.ttf",
+            "./assets/fonts/Rubik-Medium.ttf"
+          ],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "Rubik",
+                "fontDefinitions": [
+                  {
+                    "path": "./assets/fonts/Rubik-Black.ttf",
+                    "weight": 900,
+                    "style": "black"
+                  },
+                  {
+                    "path": "./assets/fonts/Rubik-BlackItalic.ttf",
+                    "weight": 900,
+                    "style": "black-italic"
+                  },
+                  {
+                    "path": "./assets/fonts/Rubik-Light.ttf",
+                    "weight": 300,
+                    "style": "light"
+                  },
+                  {
+                    "path": "./assets/fonts/Rubik-Medium.ttf",
+                    "weight": 500,
+                    "style": "medium"
+                  }
+                ]
+              }
+            ]
+          },
+          "ios": {
+            "fonts": [
+              "./assets/fonts/Rubik-BlackItalic.ttf",
+              "./assets/fonts/Rubik-Light.ttf",
+              "./assets/fonts/Rubik-Medium.ttf"
+            ]
           }
         }
       ]
