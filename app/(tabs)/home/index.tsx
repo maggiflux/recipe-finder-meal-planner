@@ -1,6 +1,7 @@
 import { getCurrentDate } from "@/utils/date";
 import { getCurrentHour } from "@/utils/hour";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Button, Text, View } from "react-native";
 
@@ -31,8 +32,18 @@ const homeScreen = () => {
           <Text>Hora: {hour}h</Text>
         </View>
         <View className="flex-row gap-2">
-          <Button onPress={() => {}} title="Cocinemos" />
-          <Button onPress={() => {}} title="Guardar recetas" />
+          <Button
+            onPress={() =>
+              router.push("/(tabs)/recipes-stack/recipe/recipesList")
+            }
+            title="Cocinemos"
+          />
+          <Button
+            onPress={() =>
+              router.push("/(tabs)/meal-planner-stack/meal-planner")
+            }
+            title="Guardar recetas"
+          />
         </View>
       </View>
       <View>

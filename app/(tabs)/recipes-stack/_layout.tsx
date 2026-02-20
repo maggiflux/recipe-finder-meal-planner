@@ -6,9 +6,15 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="mealPlanner/index"
+        name="createRecipeFormScreen/index"
         options={{
-          title: "Meal Planner",
+          title: "Create recipe",
+        }}
+      />
+      <Stack.Screen
+        name="[recipe]/index"
+        options={{
+          title: "Recipe",
         }}
       />
     </Stack>

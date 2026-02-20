@@ -22,7 +22,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="recipesList/index"
+          name="recipes-stack"
           options={{
             title: "Recetas",
             tabBarIcon: ({ color }) => (
@@ -31,7 +31,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="(stack)"
+          name="meal-planner-stack"
           options={{
             title: "Planner",
             tabBarIcon: ({ color }) => (
