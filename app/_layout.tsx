@@ -2,7 +2,9 @@ import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
+import { StatusBar, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
 // TODO: QUERY TANSTACK
@@ -27,7 +29,26 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <Slot />
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container} edges={["top"]}>
+          <Slot />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: StatusBar.currentHeight,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: "pink",
+  },
+  text: {
+    fontSize: 42,
+    padding: 12,
+  },
+});

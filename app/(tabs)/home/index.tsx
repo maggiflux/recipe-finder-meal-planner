@@ -40,7 +40,7 @@ const homeScreen = () => {
           />
           <Button
             onPress={() =>
-              router.push("/(tabs)/meal-planner-stack/meal-planner")
+              router.push(`/(tabs)/meal-planner-stack/meal-planner`)
             }
             title="Guardar recetas"
           />

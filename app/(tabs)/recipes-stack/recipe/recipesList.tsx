@@ -127,7 +127,9 @@ const recipesListScreen = () => {
         <Text>Tienes una receta nueva? hay que mejorar alguna?</Text>
         <Button
           title="+ Ir a crear"
-          onPress={() => router.push(`/(tabs)/meal-planner-stack/meal-planner`)}
+          onPress={() =>
+            router.push("/recipes-stack/create-recipe/createRecipeForm")
+          }
         />
       </View>
     </View>
