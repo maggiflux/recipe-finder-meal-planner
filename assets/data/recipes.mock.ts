@@ -4,6 +4,7 @@ export const recipesList = [
     title: "Tartaletas de manzana casera",
     level: "intermedio",
     tag: "dulce",
+    origin: "abuelos",
     image:
       "https://media.istockphoto.com/id/2233693049/es/foto/tartaletas-de-caramelo-de-manzana-y-nueces.webp?a=1&b=1&s=612x612&w=0&k=20&c=kOs3cLbfNr1RKqWjoA0NK4jcI12uj83i-rBQwJO42Qo=",
     ingredients: [
@@ -23,6 +24,7 @@ export const recipesList = [
     title: "Ensalada mediterránea",
     level: "fácil",
     tag: "salado",
+    origin: "padres",
     image:
       "https://media.istockphoto.com/id/1349067702/es/foto/ensalada-griega-con-aderezo-de-vinagreta-cubierto-con-pollo-a-la-parrilla.webp?a=1&b=1&s=612x612&w=0&k=20&c=K1CUz5IQAcybb748KrWhRSKW9IE58g8xDSTNzKpw16I=",
     ingredients: [
@@ -42,6 +44,7 @@ export const recipesList = [
     title: "Smoothie de fresa y banana",
     level: "fácil",
     tag: "bebidas",
+    origin: "abuelos",
     image:
       "https://media.istockphoto.com/id/1249580424/es/foto/vaso-de-batido-de-fresa-y-pl%C3%A1tano-o-batido-con-frutas-frescas-y-bayas-refrescante-bebida-de.webp?a=1&b=1&s=612x612&w=0&k=20&c=psgxxavE2Vvx_sMxD7fiICUnj5pr3WwbY9TMOUZVNwk=",
     ingredients: [
@@ -59,6 +62,7 @@ export const recipesList = [
     title: "Guacamole clásico",
     level: "fácil",
     tag: "snack",
+    origin: "mios",
     image:
       "https://images.unsplash.com/photo-1680992071073-cb1696ba8d3e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3VhY2Ftb2xlfGVufDB8fDB8fHww",
     ingredients: [
@@ -77,6 +81,7 @@ export const recipesList = [
     title: "Tarta de manzanas con canela",
     level: "difícil",
     tag: "dulce",
+    origin: "abuelos",
     image:
       "https://media.istockphoto.com/id/2233693049/es/foto/tartaletas-de-caramelo-de-manzana-y-nueces.webp?a=1&b=1&s=612x612&w=0&k=20&c=kOs3cLbfNr1RKqWjoA0NK4jcI12uj83i-rBQwJO42Qo=",
     ingredients: [

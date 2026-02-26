@@ -10,11 +10,12 @@ interface RecipePostStore {
 interface RecipePost {
   id: string;
   title: string;
-  level: "fácil" | "intermedio" | "difícil";
-  tag: ("dulce" | "salado" | "bebidas" | "snack")[];
   image?: string;
   ingredients: string[];
   instructions: string;
+  level: "fácil" | "intermedio" | "difícil";
+  tag: ("dulce" | "salado" | "bebidas" | "snack")[];
+  origin: "abuelos" | "padres" | "mios";
   createdAt: Date;
 }
 

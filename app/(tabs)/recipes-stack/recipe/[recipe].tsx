@@ -34,6 +34,8 @@ const recipeScreen = () => {
         <Text>{fullRecipe?.instructions}</Text>
         <Text>{fullRecipe?.level}</Text>
         <Text>{fullRecipe?.tag}</Text>
+        <Text>{fullRecipe?.origin}</Text>
+
         <Text>{fullRecipe?.createdAt}</Text>
         <View className="flex-row gap-4">
           <Button title="editar receta" onPress={() => handleSubmit()} />
