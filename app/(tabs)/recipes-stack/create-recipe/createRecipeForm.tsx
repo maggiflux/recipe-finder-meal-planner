@@ -1,5 +1,7 @@
+import { getCurrentDate } from "@/utils/date";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
+
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -28,10 +30,12 @@ type FormData = {
   imageUri?: string;
   ingredients: string[];
   instructions: string;
+  createdAt: string;
 };
 
 const createRecipeFormScreen = () => {
   const [image, setImage] = useState<string | null>(null);
+
   const {
     control,
     handleSubmit,
@@ -49,6 +53,7 @@ const createRecipeFormScreen = () => {
       origin: "mios",
       imageUri: "",
       instructions: "",
+      createdAt: new Date().toISOString(),
     },
   });
 
@@ -118,10 +123,10 @@ const createRecipeFormScreen = () => {
       console.log(error);
     }
   };
-  // if (tags) return <Text>{`${tags}`}</Text>;
-
+  const { capitalizeDate } = getCurrentDate();
   //BOTON ENVIAR FORM
   const onSubmit = (data: FormData) => console.log(data);
+
   return (
     <View>
       <Text className="font-sans text-title color-primary font-bold mb-6">
@@ -204,7 +209,6 @@ const createRecipeFormScreen = () => {
           );
         })}
       </View>
-
       <Controller
         control={control}
         name="ingredients"
@@ -247,7 +251,7 @@ const createRecipeFormScreen = () => {
           </View>
         </TouchableOpacity>
       )}
-      <Text>Creado fecha</Text>
+
       <Button title="Enviar" onPress={handleSubmit(onSubmit)} />
     </View>
   );
