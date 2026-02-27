@@ -1,9 +1,14 @@
-import { getCurrentDate } from "@/utils/date";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 
 import React, { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
+
 import {
   Alert,
   Button,
@@ -14,6 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 type Props = {
   label: string;
@@ -28,13 +34,16 @@ type FormData = {
   tag: ("dulce" | "salado" | "bebidas" | "snack")[];
   origin: "abuelos" | "padres" | "mios";
   imageUri?: string;
-  ingredients: string[];
+  ingredients: { value: string }[];
   instructions: string;
   createdAt: string;
+  isRecording: boolean;
 };
 
 const createRecipeFormScreen = () => {
   const [image, setImage] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(true);
+  const [addIngredientInput, setAddIngredientInput] = useState();
 
   const {
     control,
@@ -42,19 +51,26 @@ const createRecipeFormScreen = () => {
     getValues,
     setValue,
     watch,
-    formState: { errors },
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<FormData>({
     defaultValues: {
       id: "",
       title: "",
-      ingredients: [],
+      ingredients: [{ value: "" }],
       level: "fácil",
-      tag: ["dulce"],
+      tag: [],
       origin: "mios",
       imageUri: "",
       instructions: "",
       createdAt: new Date().toISOString(),
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "ingredients",
   });
 
   //LEVELS
@@ -123,137 +139,200 @@ const createRecipeFormScreen = () => {
       console.log(error);
     }
   };
-  const { capitalizeDate } = getCurrentDate();
-  //BOTON ENVIAR FORM
-  const onSubmit = (data: FormData) => console.log(data);
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(data);
+      reset();
+      setImage(null);
+    } catch (error) {
+      setError("root", {
+        message: "esta receta ya existe",
+      });
+    }
+  };
 
   return (
-    <View>
-      <Text className="font-sans text-title color-primary font-bold mb-6">
-        Añade tu receta
-      </Text>
-      <Controller
-        control={control}
-        name="title"
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="title"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            className="bg-cyan-300 rounded-md "
-          />
-        )}
-      />
-      {/*       LEVEL        */}
-      <Text className="text-primary font-bold">NIVEL</Text>
-      <View className="flex-row gap-4 justify-center mt-4 mb-6">
-        {levels.map((level: any) => {
-          const isSelected = selectedLevel === level;
-          return (
-            <Pressable
-              key={level}
-              onPress={() => setValue("level", level)}
-              className={`py-2 px-6 rounded-sm ${
-                isSelected ? "bg-primary" : "bg-slate-400"
-              }`}
-            >
-              <Text className={isSelected ? "text-white" : "text-primary"}>
-                {level}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-      {/*       ORIGEN         */}
-      <Text className="text-primary font-bold">ORIGEN</Text>
-      <View className="flex-row gap-4 justify-center mb-6">
-        {origins.map((origin) => {
-          const isSelected = selectedOrigin === origin;
-          return (
-            <Pressable
-              key={origin}
-              onPress={() => setValue("origin", origin)}
-              className={`py-2 px-6 rounded-sm ${
-                isSelected ? "bg-primary" : "bg-slate-400"
-              }`}
-            >
-              <Text className={isSelected ? "text-white" : "text-primary"}>
-                {origin}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
-      {/*       LABEL         */}
-      <Text className="text-primary font-bold">ETIQUETA</Text>
-      <View className="flex-row gap-4 justify-center mb-6">
-        {tags.map((tag) => {
-          const isSelected = selectedTag.includes(tag);
+    <ScrollView>
+      <View>
+        <Text className="font-sans text-title color-primary font-bold mb-6">
+          Añade tu receta
+        </Text>
+        {/*       TITULO        */}
+        <Controller
+          control={control}
+          name="title"
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              placeholder="title"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              className="bg-cyan-300 rounded-md "
+            />
+          )}
+        />
+        {errors.title && <Text>La receta debe tener título</Text>}
+        {/*       LEVEL        */}
+        <Text className="text-primary font-bold">NIVEL</Text>
+        <View className="flex-row gap-4 justify-center mt-4 mb-6">
+          {levels.map((level: any) => {
+            const isSelected = selectedLevel === level;
+            return (
+              <Pressable
+                key={level}
+                onPress={() => setValue("level", level)}
+                className={`py-2 px-6 rounded-sm ${
+                  isSelected ? "bg-primary" : "bg-slate-400"
+                }`}
+              >
+                <Text className={isSelected ? "text-white" : "text-primary"}>
+                  {level}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        {/*       ORIGEN         */}
+        <Text className="text-primary font-bold">ORIGEN</Text>
+        <View className="flex-row gap-4 justify-center mb-6">
+          {origins.map((origin) => {
+            const isSelected = selectedOrigin === origin;
+            return (
+              <Pressable
+                key={origin}
+                onPress={() => setValue("origin", origin)}
+                className={`py-2 px-6 rounded-sm ${
+                  isSelected ? "bg-primary" : "bg-slate-400"
+                }`}
+              >
+                <Text className={isSelected ? "text-white" : "text-primary"}>
+                  {origin}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        {/*       LABEL         */}
+        <Text className="text-primary font-bold">ETIQUETA</Text>
+        <View className="flex-row gap-4 justify-center mb-6">
+          {tags.map((tag) => {
+            const isSelected = selectedTag.includes(tag);
 
-          return (
-            <Pressable
-              key={tag}
-              onPress={() => toggleTag(tag)}
-              className={`py-2 px-6 rounded-sm ${
-                isSelected ? "bg-primary" : "bg-slate-400"
-              }`}
-            >
-              <Text className={isSelected ? "text-white" : "text-primary"}>
-                {tag}
-              </Text>
+            return (
+              <Pressable
+                key={tag}
+                onPress={() => toggleTag(tag)}
+                className={`py-2 px-6 rounded-sm ${
+                  isSelected ? "bg-primary" : "bg-slate-400"
+                }`}
+              >
+                <Text className={isSelected ? "text-white" : "text-primary"}>
+                  {tag}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        {/*       INGREDIENTS         */}
+        <Text className="text-primary font-bold">INGREDIENTES</Text>
+
+        {fields.map((item, index) => (
+          <View key={item.id} className="flex-row items-center gap-2 mb-2">
+            <Controller
+              key={item.id}
+              control={control}
+              name={`ingredients.${index}.value`}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  placeholder="ingredientes"
+                  value={value}
+                  onChangeText={onChange}
+                  className="w-1/2 bg-slate-400 rounded-md"
+                />
+              )}
+            />
+            <Pressable>
+              <FontAwesome
+                size={28}
+                name="microphone"
+                color={"color-primary"}
+                className={` rounded-lg w-11 h-15 text-center ${
+                  isRecording ? "bg-red-500" : "bg-slate-400"
+                }`}
+              />
+              {isRecording && <Text>Grabando...</Text>}
             </Pressable>
-          );
-        })}
-      </View>
-      <Controller
-        control={control}
-        name="ingredients"
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur } }) => (
-          <TextInput
-            placeholder="ingredients"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            //value={value}
-            className="bg-pink-300 rounded-md "
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name="instructions"
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="instructions"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            className="bg-cyan-300 rounded-md "
-          />
-        )}
-      />
-      {image ? (
-        <Image source={{ uri: image }} className="h-20" />
-      ) : (
-        <TouchableOpacity onPress={pickImageAsync}>
-          <View className="bg-orange-200">
-            <FontAwesome size={28} name="home" color={"color-primary"} />
-            <Text>Selecciona una imagen</Text>
+
+            <Pressable
+              onPress={() => remove(index)}
+              className="w-10 rounded-md px-2 py-2 bg-red-400 m-2"
+            >
+              <FontAwesome
+                size={28}
+                name="trash"
+                color={"color-primary"}
+                className="rounded-lg w-11 h-15 text-cente"
+              />
+            </Pressable>
           </View>
-        </TouchableOpacity>
-      )}
+        ))}
+        <Pressable
+          onPress={() => append({ value: "" })}
+          className="w-10 rounded-md px-2 py-2 bg-red-400 m-2"
+        >
+          <Text className="text-center">+</Text>
+        </Pressable>
 
-      <Button title="Enviar" onPress={handleSubmit(onSubmit)} />
-    </View>
+        <Controller
+          control={control}
+          name="instructions"
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              placeholder="instructions"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              className="bg-cyan-300 rounded-md "
+            />
+          )}
+        />
+        <Pressable>
+          <FontAwesome
+            size={28}
+            name="microphone"
+            color={"color-primary"}
+            className={` rounded-lg w-11 h-15 text-center ${
+              isRecording ? "bg-red-500" : "bg-slate-400"
+            }`}
+          />
+          {isRecording && <Text>Grabando...</Text>}
+        </Pressable>
+        {image ? (
+          <Image source={{ uri: image }} className="h-20" />
+        ) : (
+          <TouchableOpacity onPress={pickImageAsync}>
+            <View className="bg-orange-200">
+              <FontAwesome size={28} name="home" color={"color-primary"} />
+              <Text>Selecciona una imagen</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        <Button
+          title={isSubmitting ? "Enviando..." : "Enviar"}
+          onPress={handleSubmit(onSubmit)}
+        />
+        {errors.root && <Text>{errors.root.message}</Text>}
+      </View>
+    </ScrollView>
   );
 };
 

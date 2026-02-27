@@ -12,7 +12,7 @@ const homeScreen = () => {
   const { hour } = getCurrentHour();
 
   return (
-    <View>
+    <View className="flex-1 bg-white px-6">
       <View className="">
         <View className="flex-row">
           <Text className="font-sans text-body font-black text-primary">
