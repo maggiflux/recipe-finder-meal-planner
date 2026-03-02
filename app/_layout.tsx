@@ -1,3 +1,5 @@
+import { queryClient } from "@/utils/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -29,11 +31,13 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.container} edges={["top"]}>
-          <Slot />
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.container} edges={["top"]}>
+            <Slot />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 }
