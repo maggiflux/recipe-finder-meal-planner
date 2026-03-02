@@ -1,23 +1,56 @@
+import { RecipePost } from "@/types/RecipePost";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { recipesList } from "../../../../assets/data/recipes.mock";
+import { db } from "../../../../firebase/init";
 
 const recipesListScreen = () => {
   // ROUTER
   const router = useRouter();
 
   //TWO FILTERS NAME AND INGREDIENT STATE
+  const [recipes, setRecipes] = useState<RecipePost[]>([]);
   const [titleSearch, setTitleSearch] = useState("");
   const [ingredientSearch, setIngredientSearch] = useState("");
 
   // FILTER CHIP STATES
   const [isOpen, setIsOpen] = useState(false); //vista que abre con los tags
-  const [selectedTags, setSelectedTags] = useState<string | null>(null); // tag seleccionado
+  const [selectedTags, setSelectedTags] = useState<Tag | null>(null); // tag seleccionado
   const ALL_TAGS = ["dulce", "salado", "bebidas", "snack"] as const; //los tags
+  type Tag = "dulce" | "salado" | "bebidas" | "snack";
+
+  //TRAER RECETAS DEL FIRESTORE
+  const fetchRecipes = async () => {
+    try {
+      const q = query(collection(db, "recipes"), orderBy("createdAt", "asc"));
+      const snapshot = await getDocs(q);
+      const fetchedRecipes = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate
+          ? doc.data().createdAt.toDate()
+          : new Date(),
+      })) as RecipePost[];
+
+      // console.log("Cantidad de documentos:", snapshot.size);
+      // console.log("Docs crudos:", snapshot.docs);
+      setRecipes(fetchedRecipes);
+      console.log(recipes);
+    } catch (error) {
+      console.log("error: ", error);
+      setRecipes([]);
+    }
+  };
+  //MONTAR EL COMPONENTE
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
+  console.log(recipes);
 
   //TWO FILTERS NAME AND INGREDIENT FUNCTION
-  const filteredRecepies = recipesList
+  const filteredRecepies = recipes
     .filter((r) => {
       return r.title.toLowerCase().includes(titleSearch.toLowerCase());
     })
@@ -27,7 +60,7 @@ const recipesListScreen = () => {
       );
     })
     .filter((r) => {
-      return !selectedTags || r.tag === selectedTags;
+      return !selectedTags || r.tag.includes(selectedTags);
     });
 
   //FILTER CHIP FUNCTIONS
@@ -36,7 +69,7 @@ const recipesListScreen = () => {
     if (isOpen === true) setIsOpen(false);
   };
 
-  const onPressTagChip = (tag: string) => {
+  const onPressTagChip = (tag: Tag) => {
     setSelectedTags((prev) => (prev === tag ? null : tag));
     setIsOpen(false);
   };
@@ -102,7 +135,7 @@ const recipesListScreen = () => {
         />
       </View>
       {/* LIST */}
-      {recipesList.length === 0 ? (
+      {recipes.length === 0 ? (
         <Text>Aún no has agregado recetas!</Text>
       ) : (
         filteredRecepies.map((recipe) => (
@@ -117,6 +150,7 @@ const recipesListScreen = () => {
             className="flex-row gap-5 cursor-pointer"
           >
             <Text>{recipe.title}</Text>
+            <Text>{recipe.origin}</Text>
             <Text>{recipe.level}</Text>
             <Text>{recipe.tag}</Text>
           </Pressable>

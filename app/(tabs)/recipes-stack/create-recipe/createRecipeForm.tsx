@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import React, { useState } from "react";
 import {
   Controller,
@@ -8,7 +8,6 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-
 import {
   Alert,
   Button,
@@ -20,6 +19,7 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { db } from "../../../../firebase/init";
 
 type Props = {
   label: string;
@@ -142,17 +142,22 @@ const createRecipeFormScreen = () => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log(data);
+      const docRef = await addDoc(collection(db, "recipes"), {
+        ...data,
+        createdAt: Timestamp.fromDate(new Date()),
+      });
+      console.log("receta creada con ID", docRef.id);
       reset();
-      setImage(null);
     } catch (error) {
+      console.log("error: ", error);
       setError("root", {
-        message: "esta receta ya existe",
+        message: "no se pudo crear la receta :(",
       });
     }
   };
-
+  {
+    errors.root && <Text>{errors.root.message}</Text>;
+  }
   return (
     <ScrollView>
       <View>
@@ -337,3 +342,52 @@ const createRecipeFormScreen = () => {
 };
 
 export default createRecipeFormScreen;
+
+// App.tsx
+/* 
+import React from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../../firebase/init"; // Ajusta la ruta si tu archivo firebase está en otra carpeta
+import { Button, StyleSheet, View } from "react-native";
+
+const createRecipeFormScreen = () => {
+  const testPushFirestore = async () => {
+    try {
+      // Referencia a la colección "recipes" (se crea automáticamente si no existe)
+      const recipesCollection = collection(db, "recipes");
+
+      // Documento de prueba
+      const docRef = await addDoc(recipesCollection, {
+        title: "Receta de prueba",
+        level: "fácil",
+        ingredients: ["ingrediente 1", "ingrediente 2"],
+        instructions: "Mezclar todo y listo",
+        createdAt: new Date().toISOString(),
+        tag: ["dulce"],
+        origin: "mios",
+      });
+
+      console.log("Documento agregado con ID:", docRef.id);
+      alert("¡Documento agregado! Revisa Firestore 🔥");
+    } catch (error) {
+      console.error("Error al agregar documento:", error);
+      alert("Error al agregar documento. Mira la consola");
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Button title="Probar Firestore" onPress={testPushFirestore} />
+    </View>
+  );
+};
+export default createRecipeFormScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+});
+ */

@@ -10,3 +10,14 @@ export const getCurrentDate = () => {
     capitalizeDate,
   };
 };
+
+export const formatDate = (date: Date): string => {
+  const formatted = date.toLocaleDateString("es-ES", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+};
