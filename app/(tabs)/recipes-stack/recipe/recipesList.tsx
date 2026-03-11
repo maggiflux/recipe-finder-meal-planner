@@ -1,84 +1,33 @@
-import { RecipePost } from "@/types/RecipePost";
+import { useFetchRecipes } from "@/hooks/recipes/useFetchRecipes";
+import { useFilteredRecipes } from "@/hooks/useFilteredRecipes";
 import { useRouter } from "expo-router";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import LottieView from "lottie-react-native";
+import React, { useRef } from "react";
 import { Button, Pressable, Text, TextInput, View } from "react-native";
-import { recipesList } from "../../../../assets/data/recipes.mock";
-import { db } from "../../../../firebase/init";
 
 const recipesListScreen = () => {
-  // ROUTER
   const router = useRouter();
 
-  //TWO FILTERS NAME AND INGREDIENT STATE
-  const [recipes, setRecipes] = useState<RecipePost[]>([]);
-  const [titleSearch, setTitleSearch] = useState("");
-  const [ingredientSearch, setIngredientSearch] = useState("");
-
-  // FILTER CHIP STATES
-  const [isOpen, setIsOpen] = useState(false); //vista que abre con los tags
-  const [selectedTags, setSelectedTags] = useState<Tag | null>(null); // tag seleccionado
   const ALL_TAGS = ["dulce", "salado", "bebidas", "snack"] as const; //los tags
-  type Tag = "dulce" | "salado" | "bebidas" | "snack";
 
-  //TRAER RECETAS DEL FIRESTORE
-  const fetchRecipes = async () => {
-    try {
-      const q = query(collection(db, "recipes"), orderBy("createdAt", "asc"));
-      const snapshot = await getDocs(q);
-      const fetchedRecipes = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate
-          ? doc.data().createdAt.toDate()
-          : new Date(),
-      })) as RecipePost[];
+  const animation = useRef<LottieView>(null);
+  const { recipesQuery } = useFetchRecipes();
 
-      // console.log("Cantidad de documentos:", snapshot.size);
-      // console.log("Docs crudos:", snapshot.docs);
-      setRecipes(fetchedRecipes);
-      console.log(recipes);
-    } catch (error) {
-      console.log("error: ", error);
-      setRecipes([]);
-    }
-  };
-  //MONTAR EL COMPONENTE
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
-  console.log(recipes);
-
-  //TWO FILTERS NAME AND INGREDIENT FUNCTION
-  const filteredRecepies = recipes
-    .filter((r) => {
-      return r.title.toLowerCase().includes(titleSearch.toLowerCase());
-    })
-    .filter((r) => {
-      return r.ingredients.some((ingredient) =>
-        ingredient.toLowerCase().includes(ingredientSearch.toLocaleLowerCase()),
-      );
-    })
-    .filter((r) => {
-      return !selectedTags || r.tag.includes(selectedTags);
-    });
-
-  //FILTER CHIP FUNCTIONS
-  const onPressTagList = () => {
-    if (isOpen === false) setIsOpen(true);
-    if (isOpen === true) setIsOpen(false);
-  };
-
-  const onPressTagChip = (tag: Tag) => {
-    setSelectedTags((prev) => (prev === tag ? null : tag));
-    setIsOpen(false);
-  };
-  const onDeleteTagChip = () => {
-    setSelectedTags(null);
-  };
-  console.log(selectedTags);
-  console.log(recipesList);
-
+  const {
+    isOpen,
+    selectedTags,
+    titleSearch,
+    setTitleSearch,
+    ingredientSearch,
+    setIngredientSearch,
+    filteredRecepies,
+    onPressTagList,
+    onPressTagChip,
+    onDeleteTagChip,
+  } = useFilteredRecipes(recipesQuery.data ?? []);
+  console.log(recipesQuery.data);
+  if (recipesQuery.isError)
+    return <Text>Hubo un error encontrando las recetas</Text>;
   return (
     <View>
       <View>
@@ -96,6 +45,7 @@ const recipesListScreen = () => {
           onChangeText={setTitleSearch}
           className="bg-neutral-500 rounded-2xl px-4 py-3 text-base text-primary"
         />
+
         {/* --------------------- BEGINNING OF FILTER CHIP --------------------- */}
         <View className="bg-cyan-400 rounded-2xl px-6 py-6 w-1/2">
           {!selectedTags ? (
@@ -125,7 +75,6 @@ const recipesListScreen = () => {
             ))}
         </View>
 
-        {/* --------------------- END OF FILTER CHIP --------------------- */}
         {/* FILTER INGREDIENT */}
         <TextInput
           placeholder="Busca por ingrediente…"
@@ -134,8 +83,20 @@ const recipesListScreen = () => {
           className="bg-neutral-500 rounded-2xl px-4 py-3 text-base text-primary"
         />
       </View>
+
       {/* LIST */}
-      {recipes.length === 0 ? (
+      {recipesQuery.isLoading ? (
+        <LottieView
+          autoPlay
+          ref={animation}
+          style={{
+            width: 200,
+            height: 200,
+            backgroundColor: "#eee",
+          }}
+          source={require("../../../../assets/animations/preparing-food.json")}
+        />
+      ) : recipesQuery.data?.length === 0 ? (
         <Text>Aún no has agregado recetas!</Text>
       ) : (
         filteredRecepies.map((recipe) => (
@@ -143,7 +104,7 @@ const recipesListScreen = () => {
             key={recipe.id}
             onPress={() =>
               router.push({
-                pathname: "/(tabs)/recipes-stack/recipe/[recipe]",
+                pathname: "/(tabs)/recipes-stack/recipe/[recipe]/recipe",
                 params: { recipe: recipe.id },
               })
             }
@@ -156,6 +117,7 @@ const recipesListScreen = () => {
           </Pressable>
         ))
       )}
+
       {/* BUTTON ANOTHER VIEW */}
       <View>
         <Text>Tienes una receta nueva? hay que mejorar alguna?</Text>

@@ -9,8 +9,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import "../global.css";
 
-// TODO: QUERY TANSTACK
-
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     "Rubik-Black": require("../assets/fonts/Rubik-Black.ttf"),

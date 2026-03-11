@@ -17,6 +17,18 @@ const StackLayout = () => {
           title: "Recipe",
         }}
       />
+      <Stack.Screen
+        name="[recipe]/recipe"
+        options={{
+          title: "Recipe",
+        }}
+      />
+      <Stack.Screen
+        name="[recipe]/update Recipe"
+        options={{
+          title: "Edit Recipe",
+        }}
+      />
     </Stack>
   );
 };

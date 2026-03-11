@@ -1,7 +1,10 @@
 import { useCreateRecipes } from "@/hooks/recipes/useCreateRecipe";
+import { useFetchRecipe } from "@/hooks/recipes/useFetchRecipe";
+import { useUpdateRecipe } from "@/hooks/recipes/useUpdateRecipe";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-import React, { useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -40,7 +43,10 @@ type FormData = {
 const createRecipeFormScreen = () => {
   const [image, setImage] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(true);
-  const [addIngredientInput, setAddIngredientInput] = useState();
+
+  const updateMutation = useUpdateRecipe();
+
+  const { recipe: id } = useLocalSearchParams<{ recipe: string }>();
 
   const createMutation = useCreateRecipes();
 
@@ -65,6 +71,23 @@ const createRecipeFormScreen = () => {
       createdAt: new Date().toISOString(),
     },
   });
+
+  const { recipeQuery } = useFetchRecipe(id!);
+  const recipe = recipeQuery.data;
+
+  useEffect(() => {
+    if (!recipe) return;
+    reset({
+      title: recipe?.title,
+      level: recipe?.level,
+      tag: recipe?.tag,
+      origin: recipe?.origin,
+      imageUri: recipe?.imageUri,
+      ingredients: recipe?.ingredients,
+      instructions: recipe?.instructions,
+      createdAt: recipe?.createdAt.toISOString(),
+    });
+  }, [recipe, reset]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -135,23 +158,16 @@ const createRecipeFormScreen = () => {
   };
 
   // BOTON ENVIAR
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    createMutation.mutate(
-      {
+  const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+    if (!recipe || !recipeQuery.data) return;
+
+    updateMutation.mutate({
+      id: recipeQuery.data.id,
+      data: {
         ...data,
         createdAt: new Date(data.createdAt),
       },
-      {
-        onSuccess: () => {
-          reset();
-        },
-        onError: () => {
-          setError("root", {
-            message: "no se pudo crear la receta :(",
-          });
-        },
-      },
-    );
+    });
   };
   {
     errors.root && <Text>{errors.root.message}</Text>;

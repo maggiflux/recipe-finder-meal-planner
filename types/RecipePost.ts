@@ -10,8 +10,8 @@ interface RecipePostStore {
 interface RecipePost {
   id: string;
   title: string;
-  image?: string;
-  ingredients: string[];
+  imageUri?: string;
+  ingredients: { value: string }[];
   instructions: string;
   level: "fácil" | "intermedio" | "difícil";
   tag: ("dulce" | "salado" | "bebidas" | "snack")[];
