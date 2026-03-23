@@ -1,4 +1,5 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { palette } from "@/theme/themeTokens";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,8 +9,8 @@ const TabsLayout = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <Tabs
         screenOptions={{
-          // headerShown: false,
-          tabBarActiveTintColor: "blue",
+          headerShown: false,
+          tabBarActiveTintColor: palette.primary,
         }}
       >
         <Tabs.Screen
@@ -17,7 +18,7 @@ const TabsLayout = () => {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="home" color={color} />
+              <FontAwesome6 size={28} name="house" color={color} />
             ),
           }}
         />
@@ -26,7 +27,7 @@ const TabsLayout = () => {
           options={{
             title: "Recetas",
             tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="home" color={color} />
+              <FontAwesome6 size={28} name="book-open" color={color} />
             ),
           }}
         />
@@ -35,7 +36,7 @@ const TabsLayout = () => {
           options={{
             title: "Planner",
             tabBarIcon: ({ color }) => (
-              <FontAwesome size={28} name="home" color={color} />
+              <FontAwesome6 size={28} name="calendar-week" color={color} />
             ),
           }}
         />

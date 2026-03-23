@@ -4,9 +4,13 @@ import React from "react";
 const StackLayout = () => {
   const navigation = useNavigation();
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen
-        name="mealPlannerScreen/index"
+        name="meal-planner/index"
         options={{
           title: "Meal Planner",
         }}

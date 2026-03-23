@@ -11,6 +11,14 @@ import "../global.css";
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
+    "Fraunces-Bold": require("../assets/fonts/Fraunces_72pt_Soft-Bold.ttf"),
+    "Fraunces-BoldItalic": require("../assets/fonts/Fraunces_72pt_Soft-BoldItalic.ttf"),
+    "Fraunces-SemiBold": require("../assets/fonts/Fraunces_72pt_Soft-SemiBold.ttf"),
+    "Fraunces-SemiBoldItalic": require("../assets/fonts/Fraunces_72pt_Soft-SemiBoldItalic.ttf"),
+    "Fraunces-Regular": require("../assets/fonts/Fraunces_72pt_Soft-Regular.ttf"),
+    "Fraunces-RegularItalic": require("../assets/fonts/Fraunces_72pt_Soft-Italic.ttf"),
+    "Fraunces-Light": require("../assets/fonts/Fraunces_72pt_SuperSoft-Light.ttf"),
+    "Fraunces-LightItalic": require("../assets/fonts/Fraunces_72pt_SuperSoft-Italic.ttf"),
     "Rubik-Black": require("../assets/fonts/Rubik-Black.ttf"),
     "Rubik-BlackItalic": require("../assets/fonts/Rubik-BlackItalic.ttf"),
     "Rubik-Light": require("../assets/fonts/Rubik-Light.ttf"),

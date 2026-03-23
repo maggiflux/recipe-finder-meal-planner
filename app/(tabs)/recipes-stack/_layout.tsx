@@ -1,32 +1,32 @@
-import { Stack, useNavigation } from "expo-router";
+import { Stack } from "expo-router";
 import React from "react";
 
 const StackLayout = () => {
-  const navigation = useNavigation();
   return (
     <Stack>
       <Stack.Screen
-        name="createRecipeFormScreen/index"
+        name="recipe/recipesList"
         options={{
-          title: "Create recipe",
+          title: "Recetas",
+          headerShown: false,
         }}
       />
       <Stack.Screen
-        name="[recipe]/index"
+        name="create-recipe/createRecipeForm"
         options={{
-          title: "Recipe",
+          title: "Añadir receta",
         }}
       />
       <Stack.Screen
-        name="[recipe]/recipe"
+        name="recipe/[recipe]/recipe"
         options={{
-          title: "Recipe",
+          title: "Receta",
         }}
       />
       <Stack.Screen
-        name="[recipe]/update Recipe"
+        name="recipe/[recipe]/updateRecipe"
         options={{
-          title: "Edit Recipe",
+          title: "Editar Receta",
         }}
       />
     </Stack>

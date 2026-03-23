@@ -1,78 +1,91 @@
+import AppButton from "@/components/ui/AppButton";
+import CardTotalTag from "@/components/ui/CardTotalTag";
+import FeaturedRecipeCard from "@/components/ui/FeaturedRecipeCard";
+import ScreenWrapper from "@/components/ui/ScreenWrapper";
+import { typography } from "@/theme/themeTokens";
 import { getCurrentDate } from "@/utils/date";
 import { getCurrentHour } from "@/utils/hour";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
-import React, { useState } from "react";
-import { Button, Text, View } from "react-native";
+import React from "react";
+import { ScrollView, Text, View } from "react-native";
 
 const homeScreen = () => {
-  const [user, setUser] = useState("Mary");
+  const user = "Mary";
 
   const { capitalizeDate } = getCurrentDate();
   const { hour } = getCurrentHour();
 
   return (
-    <View className="flex-1 bg-white px-6">
-      <View className="">
-        <View className="flex-row">
-          <Text className="font-sans text-body font-black text-primary">
-            Buenos días{" "}
+    <ScreenWrapper>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* 👋 Header */}
+        <View className="px-6">
+          <Text className={`${typography.titleSemiBoldItalic}`}>
+            Buenos días {user} 👋
           </Text>
-          <Text className="font-sans text-body font-medium text-primary">
-            {user}
-          </Text>
+          <View className="mt-2">
+            <Text
+              className={`${typography.titleLight} text-secondary text-right`}
+            >
+              {capitalizeDate}
+            </Text>
+            <Text
+              className={`${typography.titleLight} text-secondary text-right`}
+            >
+              {hour}h
+            </Text>
+          </View>
         </View>
+        {/* 🍳 Título */}
         <View>
-          <Text className="font-sans text-title font-black text-primary">
-            ¿Qué vamos a cocinar hoy?
-          </Text>
+          <FeaturedRecipeCard
+            title="¿Qué vamos a cocinar hoy?"
+            subtitle="Receta destacada"
+            // className="text-small font-titleSemiBoldItalic"
+            imageUri="https://plus.unsplash.com/premium_photo-1729624130843-d8fcadd95c3f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          />
         </View>
-        <View>
-          <Text>{capitalizeDate}</Text>
-          <Text>Hora: {hour}h</Text>
-        </View>
-        <View className="flex-row gap-2">
-          <Button
+
+        {/* 🔘 Botones */}
+        <View className="flex-row gap-3 mt-3 mb-4 mx-6 justify-center">
+          <AppButton
             onPress={() =>
               router.push("/(tabs)/recipes-stack/recipe/recipesList")
             }
-            title="Cocinemos"
+            variant="primary"
+            label="Buscar recetas"
           />
-          <Button
+          <AppButton
             onPress={() =>
-              router.push(`/(tabs)/meal-planner-stack/meal-planner`)
+              router.push("/(tabs)/meal-planner-stack/meal-planner")
             }
-            title="Guardar recetas"
+            variant="outline"
+            label="Planear comidas"
           />
         </View>
-      </View>
-      <View>
-        <Text>Organiza tus comidas y descubre nuevas recetas.</Text>
-        <Text>Así va la lista</Text>
-      </View>
-      <View className="flex-row flex-wrap mx-3">
-        <View className="bg-slate-500 w-1/2 p-2 rounded-tr-lg">
-          <FontAwesome size={28} name="home" color={"color-primary"} />
-          <Text>12</Text>
-          <Text>Recetas dulces</Text>
+
+        {/* 🧠 Texto sección */}
+        <View className=" mx-6 py-6">
+          <Text className={`${typography.titleRegular}`}>
+            Descubre nuevas recetas, agrega alguna que encontraste y organiza
+            tus comidas.
+          </Text>
         </View>
-        <View className="bg-slate-500 w-1/2 p-2 rounded-tr-lg">
-          <FontAwesome size={28} name="home" color={"color-primary"} />
-          <Text>12</Text>
-          <Text>Recetas saladas</Text>
+
+        {/* 📊 Stats */}
+        <View className="flex-row flex-wrap gap-3 px-4">
+          <CardTotalTag />
         </View>
-        <View className="bg-slate-300 w-1/2 p-2 rounded-tr-lg">
-          <FontAwesome size={28} name="home" color={"color-primary"} />
-          <Text>12</Text>
-          <Text>Recetas picoteo</Text>
+        {/* 🧠 Texto sección */}
+        <View className="mt-16 pt-6 pb-5 bg-primary rounded-t-lg">
+          <Text
+            className={`${typography.titleLightItalic} text-muted text-center `}
+          >
+            Mariela Rodriguez Maggi | mariela.rg.maggi@gmail.com
+          </Text>
         </View>
-        <View className="bg-slate-300 w-1/2 p-2 rounded-tr-lg">
-          <FontAwesome size={28} name="home" color={"color-primary"} />
-          <Text>12</Text>
-          <Text>Recetas bebidas</Text>
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </ScreenWrapper>
   );
 };
 
