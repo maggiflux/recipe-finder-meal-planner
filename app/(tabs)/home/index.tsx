@@ -1,5 +1,6 @@
 import AppButton from "@/components/ui/AppButton";
 import CardTotalTag from "@/components/ui/CardTotalTag";
+import CreditName from "@/components/ui/CreditName";
 import FeaturedRecipeCard from "@/components/ui/FeaturedRecipeCard";
 import ScreenWrapper from "@/components/ui/ScreenWrapper";
 import { typography } from "@/theme/themeTokens";
@@ -77,13 +78,7 @@ const homeScreen = () => {
           <CardTotalTag />
         </View>
         {/* 🧠 Texto sección */}
-        <View className="mt-16 pt-6 pb-5 bg-primary rounded-t-lg">
-          <Text
-            className={`${typography.titleLightItalic} text-muted text-center `}
-          >
-            Mariela Rodriguez Maggi | mariela.rg.maggi@gmail.com
-          </Text>
-        </View>
+        <CreditName />
       </ScrollView>
     </ScreenWrapper>
   );

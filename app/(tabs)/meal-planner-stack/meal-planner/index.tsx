@@ -1,3 +1,4 @@
+import CreditName from "@/components/ui/CreditName";
 import ScreenWrapper from "@/components/ui/ScreenWrapper";
 import { typography } from "@/theme/themeTokens";
 import LottieView from "lottie-react-native";
@@ -37,13 +38,7 @@ const mealPlannerScreen = () => {
             </View>
           </View>
 
-          <View className="mt-16 pt-6 pb-5 bg-primary rounded-t-lg">
-            <Text
-              className={`${typography.titleLightItalic} text-muted text-center `}
-            >
-              Mariela Rodríguez Maggi | mariela.rg.maggi@gmail.com
-            </Text>
-          </View>
+          <CreditName />
         </View>
       </ScrollView>
     </ScreenWrapper>

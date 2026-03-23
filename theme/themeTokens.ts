@@ -3,7 +3,7 @@ export const typography = {
   titleBoldItalic: "text-title font-titleBoldItalic text-primary",
   titleSemiBold: "text-subtitle font-titleSemiBold text-secondary",
   titleSemiBoldItalic: "text-subtitle font-titleSemiBoldItalic text-secondary",
-  titleRegular: "text-minititle font-titleRegularItalic",
+  titleRegular: "text-minititle font-titleRegular",
   titleRegularItalic: "text-minititle font-titleRegularItalic",
   titleLight: "text-body font-titleLight",
   titleLightItalic: "text-body font-titleLightItalic",
